@@ -27,8 +27,8 @@ func (e Entry) String() string {
 }
 
 // NewFromPath returns entries from codeowners
-func NewFromPath(repoPath string) ([]Entry, error) {
-	r, err := openCodeownersFile(repoPath)
+func NewFromPath(repoPath string, CodeownersFile string) ([]Entry, error) {
+	r, err := openCodeownersFile(repoPath, CodeownersFile)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,14 @@ func NewFromPath(repoPath string) ([]Entry, error) {
 
 // openCodeownersFile finds a CODEOWNERS file and returns content.
 // see: https://help.github.com/articles/about-code-owners/#codeowners-file-location
-func openCodeownersFile(dir string) (io.Reader, error) {
+func openCodeownersFile(dir string, CodeownersFile string) (io.Reader, error) {
+	if CodeownersFile != "" {
+		_, err := fs.Stat(CodeownersFile)
+		if err != nil {
+			return fs.Open(CodeownersFile)
+		}
+		return nil, fmt.Errorf("%s not found", CodeownersFile)
+	}
 	var detectedFiles []string
 	for _, p := range []string{".", "docs", ".github"} {
 		pth := path.Join(dir, p)

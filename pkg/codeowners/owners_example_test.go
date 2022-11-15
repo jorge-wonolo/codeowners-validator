@@ -9,7 +9,7 @@ import (
 func ExampleNewFromPath() {
 	pathToCodeownersFile := "./testdata/"
 
-	entries, err := codeowners.NewFromPath(pathToCodeownersFile)
+	entries, err := codeowners.NewFromPath(pathToCodeownersFile, "")
 	if err != nil {
 		panic(err)
 	}

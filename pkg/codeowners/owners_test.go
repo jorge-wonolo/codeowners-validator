@@ -62,7 +62,7 @@ func TestParseCodeownersSuccess(t *testing.T) {
 	require.NoError(t, err)
 
 	// when
-	entries, err := codeowners.NewFromPath(givenCodeownerPath)
+	entries, err := codeowners.NewFromPath(givenCodeownerPath, "")
 
 	// then
 	require.NoError(t, err)
@@ -100,7 +100,7 @@ func TestFindCodeownersFileSuccess(t *testing.T) {
 			require.NoError(t, err)
 
 			// when
-			entry, err := codeowners.NewFromPath(tc.basePath)
+			entry, err := codeowners.NewFromPath(tc.basePath, "")
 
 			// then
 			require.NoError(t, err)
@@ -119,7 +119,7 @@ func TestFindCodeownersFileFailure(t *testing.T) {
 	expErrMsg := fmt.Sprintf("No CODEOWNERS found in the root, docs/, or .github/ directory of the repository %s", givenRepoPath)
 
 	// when
-	entries, err := codeowners.NewFromPath(givenRepoPath)
+	entries, err := codeowners.NewFromPath(givenRepoPath, "")
 
 	// then
 	assert.EqualError(t, err, expErrMsg)
@@ -166,7 +166,7 @@ func TestMultipleCodeownersFileFailure(t *testing.T) {
 			}
 
 			// when
-			entries, err := codeowners.NewFromPath(givenRepoPath)
+			entries, err := codeowners.NewFromPath(givenRepoPath, "")
 
 			// then
 			assert.EqualError(t, err, tc.expErrMsg)

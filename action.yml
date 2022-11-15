@@ -37,6 +37,11 @@ inputs:
     required: false
     default: ""
 
+  codeowners_file_path:
+    description: "Explicit relative path to your CODEOWNERS file. If not provided then the action will try to find the CODEOWNERS"
+    required: false
+    default: ""
+
   repository_path:
     description: "The repository path in which CODEOWNERS file should be validated."
     required: false

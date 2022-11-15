@@ -24,6 +24,7 @@ type Config struct {
 	CheckFailureLevel  check.SeverityType `envconfig:"default=warning"`
 	Checks             []string           `envconfig:"optional"`
 	ExperimentalChecks []string           `envconfig:"optional"`
+	CodeownersFilePath string             `envconfig:"optional"`
 }
 
 func main() {
@@ -80,7 +81,7 @@ func NewRoot() *cobra.Command {
 			exitOnError(err)
 
 			// init codeowners entries
-			codeownersEntries, err := codeowners.NewFromPath(cfg.RepositoryPath)
+			codeownersEntries, err := codeowners.NewFromPath(cfg.RepositoryPath, cfg.CodeownersFilePath)
 			exitOnError(err)
 
 			// run check runner

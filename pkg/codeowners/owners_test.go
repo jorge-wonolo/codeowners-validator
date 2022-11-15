@@ -109,6 +109,40 @@ func TestFindCodeownersFileSuccess(t *testing.T) {
 	}
 }
 
+func TestFindCodeownersFileExplictPathSuccess(t *testing.T) {
+	// given
+	tFS := afero.NewMemMapFs()
+	revert := codeowners.SetFS(tFS)
+	defer revert()
+
+	_, err := tFS.Create(path.Join("/workspace/go/repo-explicit-1/.custom/", "CODEOWNERS"))
+	require.NoError(t, err)
+
+	// when
+	entry, err := codeowners.NewFromPath("/workspace/go/repo-explicit-1/", ".custom/CODEOWNERS")
+
+	// then
+	require.NoError(t, err)
+	require.Empty(t, entry)
+}
+
+func TestFindCodeownersFileExplictPathFailure(t *testing.T) {
+	// given
+	tFS := afero.NewMemMapFs()
+	revert := codeowners.SetFS(tFS)
+	defer revert()
+
+	_, err := tFS.Create(path.Join("/workspace/go/repo-explicit-1/.custom-fake/", "CODEOWNERS"))
+	require.NoError(t, err)
+
+	// when
+	entry, err := codeowners.NewFromPath("/workspace/go/repo-explicit-1/", ".custom/CODEOWNERS")
+
+	// then
+	assert.EqualError(t, err, ".custom/CODEOWNERS not found")
+	assert.Nil(t, entry)
+}
+
 func TestFindCodeownersFileFailure(t *testing.T) {
 	// given
 	tFS := afero.NewMemMapFs()

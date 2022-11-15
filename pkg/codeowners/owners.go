@@ -40,9 +40,10 @@ func NewFromPath(repoPath string, CodeownersFile string) ([]Entry, error) {
 // see: https://help.github.com/articles/about-code-owners/#codeowners-file-location
 func openCodeownersFile(dir string, CodeownersFile string) (io.Reader, error) {
 	if CodeownersFile != "" {
-		_, err := fs.Stat(CodeownersFile)
-		if err != nil {
-			return fs.Open(CodeownersFile)
+		codeownersFullPath := path.Join(dir, CodeownersFile)
+		_, err := fs.Stat(codeownersFullPath)
+		if err == nil {
+			return fs.Open(codeownersFullPath)
 		}
 		return nil, fmt.Errorf("%s not found", CodeownersFile)
 	}
